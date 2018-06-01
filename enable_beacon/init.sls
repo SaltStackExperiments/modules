@@ -7,7 +7,7 @@ enable_rss_beacon:
 
 add_beacon_if_not_there:
   module.run:
-    - name: beacons.add
+    - beacons.add:
       - name: rss_beacon
       - beacon_data:
           interval: 5
