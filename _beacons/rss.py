@@ -69,7 +69,8 @@ def beacon(config):
             # This rss feed has changed
             __salt__['grains.setval'](hash_key, current_lasthash)
             _event = {
-                'tag': 'my/beacons/rss/newentry',
+                'tag': 'rss/{}/newentry'.format(_url),
+                'rss_url': _url,
                 'entry': parsed_feed.entries[0]['link']
                 }
             list_of_dicts.append(_event)
