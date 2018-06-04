@@ -53,10 +53,11 @@ def beacon(config):
     for _url in url_list:
         parsed_feed = feedparser.parse(_url)
         # Generate MD5 hash of the most current item's title and link elements.
-        lasthash = __grains__.get('last_rss_hash_{}'.format(_url))
+        hash_key = 'last_rss_hash_{}'.format(_url)
+        lasthash = __grains__.get(hash_key)
         log.debug('{} parsed with {} entries'.format(
                   config.get('url'), len(parsed_feed)))
-        current_lasthash = hashlib.md5(parsed_feed.entries[0].link +
+        current_lasthash = hashlib.md5(_url + parsed_feed.entries[0].link +
                                        parsed_feed.entries[0].title
                                        ).hexdigest()
         log.debug('feed modified on %s', parsed_feed.modified)
@@ -66,7 +67,7 @@ def beacon(config):
 
         if lasthash != current_lasthash:
             # This rss feed has changed
-            __salt__['grains.setval']('last_rss_hash', current_lasthash)
+            __salt__['grains.setval'](hash_key, current_lasthash)
             _event = {
                 'tag': 'my/beacons/rss/newentry',
                 'entry': parsed_feed.entries[0]['link']
