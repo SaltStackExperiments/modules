@@ -2,6 +2,10 @@ install_python_feedparser:
   pkg.installed:
     - name: python-feedparser
 
+conf_in_place_test:
+  file.managed:
+    - source: salt://enable_beacon/files/rss_beacon.conf
+    - name: /etc/salt/minion.d/rss_beacon.conf
 # enable_rss_beacon:
 #   beacon.present:
 #     - save: True
